@@ -23,6 +23,8 @@
       const TRACKING_ENABLED = true;
 
       if (!TRACKING_ENABLED) return;
+    console.log('hello')
+    console.log(process.env.VERCEL_PROTECTION_BYPASS)
 
       async function trackVisitor() {
         try {
@@ -30,6 +32,7 @@
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              'x-vercel-protection-bypass': import.meta.env.VITE_VERCEL_PROTECTION_BYPASS
             },
             body: JSON.stringify({
               page: window.location.pathname,

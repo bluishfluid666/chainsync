@@ -8,8 +8,7 @@ export const trackingConfig = {
   // Set to false to disable tracking
   enabled: true,
 
-  // Your Vercel API URL (update after deployment)
-  // Format: https://your-project-name.vercel.app
+  // Vercel API URL
   apiUrl: 'https://chainsync-tracking.vercel.app',
 
   // Endpoint path
@@ -32,6 +31,7 @@ export async function trackVisitor(page: string, referrer?: string) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-vercel-protection-bypass': import.meta.env.VITE_VERCEL_PROTECTION_BYPASS
       },
       body: JSON.stringify({
         page,
