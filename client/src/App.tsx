@@ -11,8 +11,15 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { useEffect } from "react";
+import { trackVisitor } from "./config/tracking";
 
 function Router() {
+    useEffect(() => {
+    // Track page view on route change
+    trackVisitor(window.location.pathname);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />

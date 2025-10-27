@@ -15,6 +15,55 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     -->
   </head>
+  <!-- ChainSync Visitor Tracking -->
+  <script>
+    (function() {
+      // Configuration
+      const TRACKING_API = 'https://chainsync-tracking.vercel.app';
+      const TRACKING_ENABLED = true;
+
+      if (!TRACKING_ENABLED) return;
+
+      async function trackVisitor() {
+        try {
+          const response = await fetch(`${TRACKING_API}/api/track`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              page: window.location.pathname,
+              referrer: document.referrer || null,
+              userAgent: navigator.userAgent,
+              timestamp: new Date().toISOString(),
+            }),
+            credentials: 'omit',
+          });
+
+          if (response.ok) {
+            console.log('[ChainSync] Visitor tracked');
+          }
+        } catch (error) {
+          // Silently fail - don't disrupt user experience
+          console.debug('[ChainSync] Tracking failed:', error.message);
+        }
+      }
+
+      // Track on page load
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', trackVisitor);
+      } else {
+        trackVisitor();
+      }
+
+      // Track on page navigation (for SPA)
+      const originalPushState = window.history.pushState;
+      window.history.pushState = function(...args) {
+        originalPushState.apply(window.history, args);
+        trackVisitor();
+      };
+    })();
+  </script>
 
   <body>
     <div id="root"></div>
